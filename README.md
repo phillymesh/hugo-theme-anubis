@@ -5,6 +5,17 @@ Changes:
 - New directory structure for modern hugo, including internal templates
 - Remove posts from the homepage
 - Automatically generate and serve webp images in blog posts (requires hugo extended)
+
+To use the new image processing you'll need to add this to your config.toml
+```toml
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.parser]
+      wrapStandAloneImageWithinParagraph = false
+      [markup.goldmark.parser.attribute]
+        block = true
+```
+
 ---
 
 Anubis is a simple minimalist theme for [Hugo blog engine](https://gohugo.io/).  
