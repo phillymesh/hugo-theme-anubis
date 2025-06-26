@@ -1,9 +1,10 @@
 # Anubis Theme for Hugo [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-## ⚠️ Theme is no longer maintained
-Thank you all.  
-More info: https://mitrich.me/posts/anubis-closed/  
-
+### Now modernized and customized for Philly Mesh!
+Changes:
+- New directory structure for modern hugo, including internal templates
+- Remove posts from the homepage
+- Automatically generate and serve webp images in blog posts (requires hugo extended)
 ---
 
 Anubis is a simple minimalist theme for [Hugo blog engine](https://gohugo.io/).  
