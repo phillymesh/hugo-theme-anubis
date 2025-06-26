@@ -1,0 +1,41 @@
+{{- /* Use all the existing logic already built into the default render template for html attributes */ -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $src := $u.String -}}
+{{- if not $u.IsAbs -}}
+  {{- $path := strings.TrimPrefix "./" $u.Path -}}
+  {{- with or (.PageInner.Resources.Get $path) (resources.Get $path) -}}
+    {{- $src = .RelPermalink -}}
+    {{- with $u.RawQuery -}}
+      {{- $src = printf "%s?%s" $src . -}}
+    {{- end -}}
+    {{- with $u.Fragment -}}
+      {{- $src = printf "%s#%s" $src . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- /* now for the new logic */ -}}
+{{- /* Creating a global variable to store the processed image */ -}}
+{{- $resized:= "" -}}
+{{- /* get the image itself from resources */ -}}
+{{- with resources.GetMatch .Destination -}}
+  {{- /* rotate it based on the EXIF metadata */ -}}
+  {{- with .Filter images.AutoOrient -}}
+    {{- /* "resize" it to the same size, but as a webp and grab its link */ -}}
+    {{- with .Resize (printf "%dx%d webp" .Width .Height) -}}
+      {{- $resized = .RelPermalink -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- /* put the whole thing in a link tag with a link to the original */ -}}
+<a href="{{ $src }}">
+{{- /* then use the default logic for the image itself, but with our new image */ -}}
+<img src="{{ $resized }}" alt="{{ .PlainText }}"
+{{- with .Title }} title="{{ . }}" {{- end -}}
+  {{- range $k, $v := .Attributes -}}
+  {{- if $v -}}
+    {{- printf " %s=%q" $k ($v | transform.HTMLEscape) | safeHTMLAttr -}}
+  {{- end -}}
+{{- end -}}
+>
+</a>
+{{- /**/ -}}
