@@ -15,12 +15,10 @@
 {{- end -}}
 {{- /* now for the new logic */ -}}
 {{- /* Creating a global variable to store the processed image */ -}}
-{{- $resized:= "" -}}
-{{- /* get the image itself from resources */ -}}
-{{- with resources.GetMatch .Destination -}}
-  {{- /* rotate it based on the EXIF metadata */ -}}
+{{- $resized := "" -}}
+{{- $path := strings.TrimPrefix "./" $u.Path -}}
+{{- with or (.PageInner.Resources.Get $path) (resources.Get $path) -}}
   {{- with .Filter images.AutoOrient -}}
-    {{- /* "resize" it to the same size, but as a webp and grab its link */ -}}
     {{- with .Resize (printf "%dx%d webp" .Width .Height) -}}
       {{- $resized = .RelPermalink -}}
     {{- end -}}
